@@ -146,6 +146,10 @@ final class Plugin
 		}
 	}
 
+	/**
+	 * @param string $s
+	 * @return string
+	 */
 	public function update_welcome_email($s)
 	{
 		$slug = $this->get_login_slug();
