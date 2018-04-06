@@ -1,0 +1,29 @@
+msgid ""
+msgstr ""
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Language: uk\n"
+"X-Source-Language: C\n"
+
+#: ../inc/Admin.php:44
+msgid "<span id=\"hide-wp-login\">Hide wp-login.php</span>"
+msgstr "<span id=\"hide-wp-login\">Сховати wp-login.php</span>"
+
+#: ../inc/Admin.php:45
+msgid "Login URL"
+msgstr "URL-адреса для входу"
+
+#: ../inc/Admin.php:101
+#, php-format
+msgid ""
+"Your login URL is now <strong><a href=\"%1$s\" "
+"target=\"_blank\">%1$s</a></strong>. Please bookmark it."
+msgstr ""
+"Ваша URL-адреса для входу тепер <strong><a href=\"%1$s\" "
+"target=\"_blank\">%1$s</a></strong>. Будь ласка, закладіть її."
+
+#: ../inc/Admin.php:108
+msgid "Settings"
+msgstr "Налаштування"

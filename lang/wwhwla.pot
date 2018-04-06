@@ -1,0 +1,18 @@
+#: ../inc/Admin.php:44
+msgid "<span id=\"hide-wp-login\">Hide wp-login.php</span>"
+msgstr ""
+
+#: ../inc/Admin.php:45
+msgid "Login URL"
+msgstr ""
+
+#: ../inc/Admin.php:101
+#, php-format
+msgid ""
+"Your login URL is now <strong><a href=\"%1$s\" target=\"_blank\">%1$s</a></"
+"strong>. Please bookmark it."
+msgstr ""
+
+#: ../inc/Admin.php:108
+msgid "Settings"
+msgstr ""
