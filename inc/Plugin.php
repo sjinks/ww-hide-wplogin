@@ -23,7 +23,7 @@ final class Plugin
 	}
 
 	/**
-	 * @codeCoverageIgnore the plugin is initialized befor the coverage processing starts
+	 * @codeCoverageIgnore the plugin is initialized before the coverage processing starts
 	 */
 	public function __construct()
 	{
@@ -32,7 +32,7 @@ final class Plugin
 
 	public function init()
 	{
-		\load_plugin_textdomain('wwhwl', /** @scrutinizer ignore-type */ false, \plugin_basename(\dirname(\dirname(__FILE__))) . '/lang/');
+		\load_plugin_textdomain('wwhwl', /** @scrutinizer ignore-type */ false, \plugin_basename(\dirname(__DIR__)) . '/lang/');
 
 		\register_setting('permalink', self::OPTION_NAME, ['type' => 'string', 'default' => '']);
 
