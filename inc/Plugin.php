@@ -10,7 +10,7 @@ final class Plugin
 	/**
 	 * @var string
 	 */
-	private $basename = '';
+	private static $basename = '';
 
 	public static function instance()
 	{
@@ -38,9 +38,9 @@ final class Plugin
 		\add_action('init', [$this, 'init'], 10, 1);
 	}
 
-	public function getBasename() : string
+	public static function getBasename() : string
 	{
-		return $this->basename;
+		return self::$basename;
 	}
 
 	public function init()
@@ -185,7 +185,7 @@ final class Plugin
 	{
 		$slug = \get_option(self::OPTION_NAME, '');
 
-		if (empty($slug) && \is_multisite() && \is_plugin_active_for_network($this->getBasename())) {
+		if (empty($slug) && \is_multisite() && \is_plugin_active_for_network(self::getBasename())) {
 			$slug = \get_site_option(self::OPTION_NAME);
 		}
 
