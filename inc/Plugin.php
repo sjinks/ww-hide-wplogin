@@ -181,7 +181,7 @@ final class Plugin
 		return \str_replace('wp-login.php', Utils::handleTrailingSlash($slug), $s);
 	}
 
-	private static function get_login_slug() : string
+	public static function get_login_slug() : string
 	{
 		$slug = \get_option(self::OPTION_NAME, '');
 

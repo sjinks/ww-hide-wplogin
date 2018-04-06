@@ -68,7 +68,7 @@ final class Admin
 	public function input_field(array $args)
 	{
 		$name   = Plugin::OPTION_NAME;
-		$value  = \esc_attr((string)\get_option($name));
+		$value  = \esc_attr(Plugin::get_login_slug());
 		$id     = \esc_attr($args['label_for'] ?? '');
 		$type   = \esc_attr($args['type'] ?? 'text');
 		$before = $args['before'] ?? '';
