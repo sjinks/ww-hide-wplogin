@@ -33,7 +33,7 @@ final class Plugin
 	 */
 	public function __construct()
 	{
-		$this->basename = \plugin_basename(\dirname(__DIR__) . '/plugin.php');
+		self::$basename = \plugin_basename(\dirname(__DIR__) . '/plugin.php');
 
 		\add_action('init', [$this, 'init'], 10, 1);
 	}
