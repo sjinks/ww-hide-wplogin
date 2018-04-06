@@ -23,3 +23,8 @@ filter:
         - 'tests/*'
     dependency_paths:
         - wordpress/
+
+checks:
+    php:
+        code_rating: true
+        duplication: true
