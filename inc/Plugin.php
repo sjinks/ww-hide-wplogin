@@ -44,6 +44,8 @@ final class Plugin
 		\add_action('wp_loaded',            [$this, 'wp_loaded']);
 		\add_filter('update_welcome_email', [$this, 'update_welcome_email']);
 
+		\remove_action('template_redirect', 'wp_redirect_admin_locations', 1000);
+
 		if (\is_admin()) {
 			// @codeCoverageIgnoreStart
 			Admin::instance();
