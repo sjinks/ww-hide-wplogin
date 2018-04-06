@@ -6,6 +6,7 @@
  Author: Volodymyr Kolesnykov
  Version: 1.0
  License: MIT
+ Network:
 */
 
 defined('ABSPATH') || die();

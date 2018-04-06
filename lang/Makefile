@@ -1,5 +1,5 @@
 PHP_FRONT      := ../inc/Plugin.php
-PHP_BACK       := $(filter-out $(PHP_FRONT),$(wildcard ../inc/*.php))
+PHP_BACK       := $(filter-out $(PHP_FRONT),$(wildcard ../inc/*.php) $(wildcard ../views/*.php))
 DOMAIN_FRONT   := wwhwl
 DOMAIN_BACK    := wwhwla
 PO_FRONT_FILES := $(wildcard $(DOMAIN_FRONT)-*.po)

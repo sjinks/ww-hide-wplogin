@@ -2,9 +2,15 @@
 namespace WildWolf\HideWPLogin;
 
 
+
 final class Plugin
 {
 	const OPTION_NAME = 'wwhwl_slug';
+
+	/**
+	 * @var string
+	 */
+	private $basename = '';
 
 	public static function instance()
 	{
@@ -27,7 +33,14 @@ final class Plugin
 	 */
 	public function __construct()
 	{
+		$this->basename = \plugin_basename(\dirname(__DIR__) . '/plugin.php');
+
 		\add_action('init', [$this, 'init'], 10, 1);
+	}
+
+	public function getBasename() : string
+	{
+		return $this->basename;
 	}
 
 	public function init()
@@ -45,6 +58,12 @@ final class Plugin
 		\add_filter('update_welcome_email', [$this, 'update_welcome_email']);
 
 		\remove_action('template_redirect', 'wp_redirect_admin_locations', 1000);
+
+		if (\is_multisite() && !\function_exists('\\is_plugin_active_for_network')) {
+			// @codeCoverageIgnoreStart
+			require_once(\ABSPATH . '/wp-admin/includes/plugin.php');
+			// @codeCoverageIgnoreEnd
+		}
 
 		if (\is_admin()) {
 			// @codeCoverageIgnoreStart
@@ -164,7 +183,13 @@ final class Plugin
 
 	private static function get_login_slug() : string
 	{
-		return (string)\get_option(self::OPTION_NAME, '');
+		$slug = \get_option(self::OPTION_NAME, '');
+
+		if (empty($slug) && \is_multisite() && \is_plugin_active_for_network($this->getBasename())) {
+			$slug = \get_site_option(self::OPTION_NAME);
+		}
+
+		return (string)$slug;
 	}
 
 	public function new_login_url(string $scheme = null)

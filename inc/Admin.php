@@ -1,7 +1,6 @@
 <?php
 namespace WildWolf\HideWPLogin;
 
-
 final class Admin
 {
 	public static function instance()
@@ -58,6 +57,12 @@ final class Admin
 		$plugin = \plugin_basename(\dirname(__DIR__) . '/plugin.php');
 		\add_filter('plugin_action_links_' . $plugin, [$this, 'plugin_action_links']);
 		\add_action('admin_notices',                  [$this, 'admin_notices']);
+
+		if (\is_multisite() && \is_plugin_active_for_network($plugin)) {
+			\add_filter('network_admin_plugin_action_links_' . $plugin, [$this, 'plugin_action_links']);
+			\add_action('wpmu_options',        [$this, 'wpmu_options']);
+			\add_action('update_wpmu_options', [$this, 'update_wpmu_options']);
+		}
 	}
 
 	public function input_field(array $args)
@@ -76,7 +81,7 @@ final class Admin
 EOT;
 	}
 
-	private static function get_forbidden_slugs()
+	private static function get_forbidden_slugs() : array
 	{
 		global $wp;
 		return \array_merge($wp->public_query_vars, $wp->private_query_vars);
@@ -110,5 +115,25 @@ EOT;
 		$link = '<a href="' . $url . '">' . \__('Settings', 'wwhwla') . '</a>';
 		$links['settings'] = $link;
 		return $links;
+	}
+
+	public function wpmu_options()
+	{
+		$options = [
+			'name'  => Plugin::OPTION_NAME,
+			'value' => \get_site_option(Plugin::OPTION_NAME, ''),
+		];
+
+		require __DIR__ . '/../views/wpmu-options.php';
+	}
+
+	public function update_wpmu_options()
+	{
+		if (isset($_POST[Plugin::OPTION_NAME])) {
+			$name  = Plugin::OPTION_NAME;
+			$value = $_POST[$name];
+
+			\update_site_option($name, $value);
+		}
 	}
 }

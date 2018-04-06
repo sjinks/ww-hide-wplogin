@@ -8,7 +8,7 @@ msgstr ""
 "X-Language: ru_RU\n"
 "X-Source-Language: C\n"
 
-#: ../inc/Plugin.php:60
+#: ../inc/Plugin.php:85
 msgid "You must log in to access the administrative area."
 msgstr ""
 "Вы должны войти в систему, чтобы получить доступ к административной области."

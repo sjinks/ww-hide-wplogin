@@ -1,18 +1,36 @@
-#: ../inc/Admin.php:44
+#: ../inc/Admin.php:45
 msgid "<span id=\"hide-wp-login\">Hide wp-login.php</span>"
 msgstr ""
 
-#: ../inc/Admin.php:45
+#: ../inc/Admin.php:46
 msgid "Login URL"
 msgstr ""
 
-#: ../inc/Admin.php:101
+#: ../inc/Admin.php:108
 #, php-format
 msgid ""
 "Your login URL is now <strong><a href=\"%1$s\" target=\"_blank\">%1$s</a></"
 "strong>. Please bookmark it."
 msgstr ""
 
-#: ../inc/Admin.php:108
+#: ../inc/Admin.php:115
 msgid "Settings"
+msgstr ""
+
+#: ../views/wpmu-options.php:2
+msgid "Hide wp-login.php"
+msgstr ""
+
+#: ../views/wpmu-options.php:5
+msgid ""
+"This option allows you to set a networkwide default, which can be overridden "
+"by individual sites."
+msgstr ""
+
+#: ../views/wpmu-options.php:6
+msgid "Simply go to to the sites permalink settings to change the URL."
+msgstr ""
+
+#: ../views/wpmu-options.php:12
+msgid "Networkwide default"
 msgstr ""
