@@ -1,5 +1,9 @@
 sudo: false
 
+env:
+  global:
+    - CC_TEST_REPORTER_ID=a99d3e2e2a89153a1035f6f2012cf35455fc1682f4e17e4e9dc8088f33c5ea11
+
 language: php
 
 notifications:
@@ -27,6 +31,9 @@ matrix:
 
 before_script:
   - composer update
+  - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+  - chmod +x ./cc-test-reporter
+  - ./cc-test-reporter before-build
   - |
     if [ -f ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/xdebug.ini ]; then
       phpenv config-rm xdebug.ini
@@ -42,5 +49,8 @@ script:
   - |
     if [[ ! -z "$WP_VERSION" ]] ; then
       vendor/bin/phpunit
-      WP_MULTISITE=1 vendor/bin/phpunit
+      WP_MULTISITE=1 vendor/bin/phpunit --coverage-clover clover.xml
     fi
+
+after_script:
+  - if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then ./cc-test-reporter after-build --coverage-input-type clover --exit-code $TRAVIS_TEST_RESULT; fi
