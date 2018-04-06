@@ -45,7 +45,9 @@ final class Plugin
 		\add_filter('update_welcome_email', [$this, 'update_welcome_email']);
 
 		if (\is_admin()) {
+			// @codeCoverageIgnoreStart
 			Admin::instance();
+			// @codeCoverageIgnoreEnd
 		}
 	}
 
@@ -107,7 +109,7 @@ final class Plugin
 			return;
 		}
 
-		$rpath    = \parse_url($_SERVER['REQUEST_URI'], \PHP_URL_PATH);
+		$rpath    = (string)\parse_url($_SERVER['REQUEST_URI'], \PHP_URL_PATH);
 		$path     = \untrailingslashit($rpath);
 		$rel_wpl  = \site_url('/', 'relative') . 'wp-login.php';
 
