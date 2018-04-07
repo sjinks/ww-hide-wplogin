@@ -36,11 +36,6 @@ final class Plugin
 		\add_action('init', [$this, 'init'], 10, 1);
 	}
 
-	public static function getBasename() : string
-	{
-		return self::$basename;
-	}
-
 	public function init()
 	{
 		\load_plugin_textdomain('wwhwl', /** @scrutinizer ignore-type */ false, \plugin_basename(\dirname(__DIR__)) . '/lang/');
@@ -57,17 +52,15 @@ final class Plugin
 
 		\remove_action('template_redirect', 'wp_redirect_admin_locations', 1000);
 
+		// @codeCoverageIgnoreStart
 		if (\is_multisite() && !\function_exists('\\is_plugin_active_for_network')) {
-			// @codeCoverageIgnoreStart
 			require_once(\ABSPATH . '/wp-admin/includes/plugin.php');
-			// @codeCoverageIgnoreEnd
 		}
 
 		if (\is_admin()) {
-			// @codeCoverageIgnoreStart
 			Admin::instance();
-			// @codeCoverageIgnoreEnd
 		}
+		// @codeCoverageIgnoreEnd
 	}
 
 	/**
@@ -183,7 +176,7 @@ final class Plugin
 	{
 		$slug = \get_option(self::OPTION_NAME, '');
 
-		if (empty($slug) && \is_multisite() && \is_plugin_active_for_network(self::getBasename())) {
+		if (empty($slug) && \is_multisite() && \is_plugin_active_for_network(self::$basename)) {
 			$slug = \get_site_option(self::OPTION_NAME);
 		}
 
