@@ -32,6 +32,7 @@ final class Plugin
 	public function __construct()
 	{
 		\add_action('init', [$this, 'init'], 10, 1);
+		$this->init_filters();
 	}
 
 	public function init()
@@ -55,8 +56,6 @@ final class Plugin
 
 		\add_action('add_option_' . Plugin::OPTION_NAME,    [$this, 'init_filters']);
 		\add_action('update_option_' . Plugin::OPTION_NAME, [$this, 'init_filters']);
-
-		$this->init_filters();
 
 		if (\is_admin()) {
 			// @codeCoverageIgnoreStart
