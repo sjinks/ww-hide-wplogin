@@ -176,7 +176,7 @@ final class Plugin
 	{
 		$slug = \get_option(self::OPTION_NAME, '');
 
-		if (empty($slug) && \is_multisite() && \is_plugin_active_for_network(self::$basename)) {
+		if (empty($slug) && \is_plugin_active_for_network(self::$basename)) {
 			$slug = \get_site_option(self::OPTION_NAME);
 		}
 
