@@ -4,7 +4,7 @@
  Plugin URI: https://github.com/sjinks/ww-hide-wplogin
  Description: Hides wp-login.php and allows you to use a custom URL for logging in.
  Author: Volodymyr Kolesnykov
- Version: 1.0
+ Version: 1.1.0
  License: MIT
  Network:
 */
