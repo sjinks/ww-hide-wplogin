@@ -151,6 +151,24 @@ class AdminTest extends WP_UnitTestCase
 		$this->assertArrayHasKey('settings', $links);
 	}
 
+	public function testNetworkAdminPluginActionLinks()
+	{
+		if (is_multisite()) {
+			$this->assertTrue(is_plugin_active_for_network('ww-hide-wplogin/plugin.php'));
+
+			$inst  = Admin::instance();
+			$inst->admin_init();
+
+			$links = apply_filters('network_admin_plugin_action_links_ww-hide-wplogin/plugin.php', []);
+			$this->assertNotEmpty($links);
+			$this->assertTrue(is_array($links));
+			$this->assertArrayHasKey('settings', $links);
+		}
+		else {
+			$this->markTestSkipped("This test makes sense only with WPMU");
+		}
+	}
+
 	public function testGetForbiddenSlugs()
 	{
 		$_POST = [Plugin::OPTION_NAME => 'p'];
@@ -194,5 +212,45 @@ class AdminTest extends WP_UnitTestCase
 		$actual   = trim(ob_get_clean());
 		$expected = '<input type="text" name="wwhwl_slug" value=""/>';
 		$this->assertEquals($expected, $actual);
+	}
+
+	public function testWPMUOptions()
+	{
+		if (is_multisite()) {
+			$this->assertTrue(is_plugin_active_for_network('ww-hide-wplogin/plugin.php'));
+
+			$inst  = Admin::instance();
+			$inst->admin_init();
+
+			update_site_option(Plugin::OPTION_NAME, 'xxx');
+
+			ob_start();
+			do_action('wpmu_options');
+			$s = ob_get_clean();
+
+			$this->assertContains('value="xxx"', $s);
+		}
+		else {
+			$this->markTestSkipped("This test makes sense only with WPMU");
+		}
+	}
+
+	public function testUpdateWPMUOptions()
+	{
+		if (is_multisite()) {
+			$this->assertTrue(is_plugin_active_for_network('ww-hide-wplogin/plugin.php'));
+
+			$inst  = Admin::instance();
+			$inst->admin_init();
+
+			$_POST[Plugin::OPTION_NAME] = 'yyy';
+			do_action('update_wpmu_options');
+			$actual = get_site_option(Plugin::OPTION_NAME);
+
+			$this->assertEquals($_POST[Plugin::OPTION_NAME], $actual);
+		}
+		else {
+			$this->markTestSkipped("This test makes sense only with WPMU");
+		}
 	}
 }

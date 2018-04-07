@@ -21,6 +21,11 @@ function _manually_load_plugin()
 
 	symlink(dirname(dirname(__FILE__)), WP_PLUGIN_DIR . '/ww-hide-wplogin');
 	wp_register_plugin_realpath(WP_PLUGIN_DIR . '/ww-hide-wplogin/plugin.php');
+
+	require_once ABSPATH . 'wp-admin/includes/plugin.php';
+
+	activate_plugin('ww-hide-wplogin/plugin.php', '', true);
+
 	require WP_PLUGIN_DIR . '/ww-hide-wplogin/plugin.php';
 }
 
