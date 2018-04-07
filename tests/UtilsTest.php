@@ -171,4 +171,38 @@ class UtilsTest extends WP_UnitTestCase
 		$actual = Utils::isSamePath($s1, $s2);
 		$this->assertEquals($expected, $actual);
 	}
+
+	public function isPostPassRequestDataProvider()
+	{
+		return [
+			['GET', [], [], [], false],
+			['GET', ['action' => 'postpass'], ['post_password' => ''], ['action' => 'postpass'], false],
+			['POST', [], [], [], false],
+			['POST', ['action' => 'postpass'], [], [], false],
+			['POST', ['action' => 'postpass'], [], ['action' => 'postpass'], false],
+			['POST', [], [], ['action' => 'postpass'], false],
+			['POST', ['action' => 'postpass'], ['post_password' => ''], [], false],
+			['POST', [], ['post_password' => ''], ['action' => 'postpass'], false],
+			['POST', ['action' => 'postpass'], ['post_password' => ''], ['action' => 'postpass'], true],
+		];
+	}
+
+	/**
+	 * @dataProvider isPostPassRequestDataProvider
+	 * @string $rm
+	 * @param array $get
+	 * @param array $post
+	 * @param array $request
+	 * @param bool $expected
+	 */
+	public function testIsPostPassRequest(string $rm, array $get, array $post, array $request, bool $expected)
+	{
+		$_SERVER['REQUEST_METHOD'] = $rm;
+		$_GET     = $get;
+		$_POST    = $post;
+		$_REQUEST = $request;
+		$actual   = Utils::isPostPassRequest();
+
+		$this->assertEquals($expected, $actual);
+	}
 }

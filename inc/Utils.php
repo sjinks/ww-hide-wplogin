@@ -98,4 +98,17 @@ abstract class Utils
 		$d2 = \rawurldecode($s2);
 		return $s1 === $s2 || $d1 === $s2 || $s1 === $d2 || $d1 === $d2;
 	}
+
+	/**
+	 * @see \wp_magic_quotes()
+	 * @return bool
+	 */
+	public static function isPostPassRequest() : bool
+	{
+		// In WordPress, `$_REQUEST = array_merge( $_GET, $_POST );`
+		$rm = $_SERVER['REQUEST_METHOD'] ?? '';
+		$ga = $_GET['action'] ?? '';
+		$ra = $_REQUEST['action'] ?? '';
+		return ('POST' === $rm) && ('postpass' === $ga) && isset($_POST['post_password']) && ($ga === $ra);
+	}
 }

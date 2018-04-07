@@ -1,8 +1,6 @@
 <?php
 namespace WildWolf\HideWPLogin;
 
-
-
 final class Plugin
 {
 	const OPTION_NAME = 'wwhwl_slug';
@@ -134,7 +132,7 @@ final class Plugin
 		$path     = \untrailingslashit($rpath);
 		$rel_wpl  = \site_url('/', 'relative') . 'wp-login.php';
 
-		if (Utils::isSamePath($path, $rel_wpl)) {
+		if (Utils::isSamePath($path, $rel_wpl) && !Utils::isPostPassRequest()) {
 			\do_action('wwhwl_wplogin_accessed');
 
 			// @codeCoverageIgnoreStart
@@ -211,7 +209,7 @@ final class Plugin
 	private function rewrite_login_url(string $url, string $scheme = null) : string
 	{
 		$slug = $this->get_login_slug();
-		if (empty($slug)) {
+		if (empty($slug) || false !== \strpos($url, 'wp-login.php?action=postpass')) {
 			return $url;
 		}
 
