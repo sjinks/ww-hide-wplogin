@@ -59,33 +59,6 @@ class PluginTest extends WP_UnitTestCase
 		}
 	}
 
-	/**
-	 * @expectedException \WPDieException
-	 */
-	public function testLoginURL_authredirect()
-	{
-		global $current_screen;
-
-		$this->assertFalse(is_admin());
-		$current_screen = new class {
-			public function in_admin()
-			{
-				return true;
-			}
-		};
-
-		add_filter('wp_redirect', function($url) { throw new \Exception($url); });
-
-		update_option(Plugin::OPTION_NAME, 'LOGIN');
-
-		try {
-			auth_redirect();
-		}
-		finally {
-			$current_screen = null;
-		}
-	}
-
 	public function testWelcomeEmail()
 	{
 		reset_phpmailer_instance();
@@ -138,13 +111,23 @@ class PluginTest extends WP_UnitTestCase
 			$wp_registered_settings = $copy;
 		}
 
+		$this->assertFalse(has_action('wp_loaded',            [$inst, 'wp_loaded']));
+		$this->assertFalse(has_filter('update_welcome_email', [$inst, 'update_welcome_email']));
+
+		$this->assertFalse(has_filter('login_url',            [$inst, 'site_url']));
+		$this->assertFalse(has_filter('site_url',             [$inst, 'site_url']));
+		$this->assertFalse(has_filter('network_site_url',     [$inst, 'site_url']));
+		$this->assertFalse(has_filter('wp_redirect',          [$inst, 'site_url']));
+
+		update_option(Plugin::OPTION_NAME, 'xxx');
+
 		$this->assertEquals(10,  has_action('wp_loaded',            [$inst, 'wp_loaded']));
 		$this->assertEquals(10,  has_filter('update_welcome_email', [$inst, 'update_welcome_email']));
 
-		$this->assertEquals(100, has_filter('login_url',            [$inst, 'login_url']));
+		$this->assertEquals(100, has_filter('login_url',            [$inst, 'site_url']));
 		$this->assertEquals(100, has_filter('site_url',             [$inst, 'site_url']));
 		$this->assertEquals(100, has_filter('network_site_url',     [$inst, 'site_url']));
-		$this->assertEquals(100, has_filter('wp_redirect',          [$inst, 'wp_redirect']));
+		$this->assertEquals(100, has_filter('wp_redirect',          [$inst, 'site_url']));
 	}
 
 	public function isNewLoginDataProvider()
@@ -270,6 +253,7 @@ class PluginTest extends WP_UnitTestCase
 			['/',                 true,  'https://' . WP_TESTS_DOMAIN . '/'],
 			['/wp-login.php',     true,  'https://' . WP_TESTS_DOMAIN . '/?LOGIN'],
 			['/wp-login.php?arg', false, 'http://' . WP_TESTS_DOMAIN . '/?LOGIN&arg'],
+			['/wp-login.php?action=postpass', false, 'http://' . WP_TESTS_DOMAIN . '/wp-login.php?action=postpass'],
 		];
 	}
 

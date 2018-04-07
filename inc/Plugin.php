@@ -10,6 +10,11 @@ final class Plugin
 	 */
 	private static $basename = '';
 
+	/**
+	 * @var bool
+	 */
+	private static $sitewide = false;
+
 	public static function instance()
 	{
 		static $self = null;
@@ -42,52 +47,75 @@ final class Plugin
 
 		\register_setting('permalink', self::OPTION_NAME, ['type' => 'string', 'default' => '']);
 
-		\add_filter('login_url',            [$this, 'login_url'],   100, 1);
-		\add_filter('site_url',             [$this, 'site_url'],    100, 3);
-		\add_filter('network_site_url',     [$this, 'site_url'],    100, 3);
-		\add_filter('wp_redirect',          [$this, 'wp_redirect'], 100, 1);
+		if (\is_multisite()) {
+			if (!\function_exists('\\is_plugin_active_for_network')) {
+				// @codeCoverageIgnoreStart
+				// bootstrap.php includes this file
+				require_once(\ABSPATH . '/wp-admin/includes/plugin.php');
+				// @codeCoverageIgnoreEnd
+			}
 
-		\add_action('wp_loaded',            [$this, 'wp_loaded']);
-		\add_filter('update_welcome_email', [$this, 'update_welcome_email']);
+			self::$sitewide = \is_plugin_active_for_network(self::$basename);
 
-		\remove_action('template_redirect', 'wp_redirect_admin_locations', 1000);
-
-		// @codeCoverageIgnoreStart
-		if (\is_multisite() && !\function_exists('\\is_plugin_active_for_network')) {
-			require_once(\ABSPATH . '/wp-admin/includes/plugin.php');
+			\add_action('add_site_option_' . Plugin::OPTION_NAME,    [$this, 'init_filters']);
+			\add_action('update_site_option_' . Plugin::OPTION_NAME, [$this, 'init_filters']);
 		}
+
+		\add_action('add_option_' . Plugin::OPTION_NAME,    [$this, 'init_filters']);
+		\add_action('update_option_' . Plugin::OPTION_NAME, [$this, 'init_filters']);
+
+		$this->init_filters();
 
 		if (\is_admin()) {
+			// @codeCoverageIgnoreStart
 			Admin::instance();
+			// @codeCoverageIgnoreEnd
 		}
-		// @codeCoverageIgnoreEnd
+	}
+
+	public function init_filters()
+	{
+		$slug = $this->get_login_slug();
+
+		if (!empty($slug)) {
+			if (100 !== \has_filter('login_url', [$this, 'login_url'])) {
+				\add_filter('login_url',            [$this, 'site_url'], 100, 1);
+				\add_filter('site_url',             [$this, 'site_url'], 100, 3);
+				\add_filter('network_site_url',     [$this, 'site_url'], 100, 3);
+				\add_filter('wp_redirect',          [$this, 'site_url'], 100, 1);
+
+				\add_action('wp_loaded',            [$this, 'wp_loaded']);
+				\add_filter('update_welcome_email', [$this, 'update_welcome_email']);
+
+				\remove_action('template_redirect', 'wp_redirect_admin_locations', 1000);
+
+				\is_admin() && \add_filter('login_url', [Admin::instance(), 'login_url'], 100, 1);
+			}
+		}
+		else {
+			\remove_filter('login_url',            [$this, 'site_url'], 100);
+			\remove_filter('site_url',             [$this, 'site_url'],  100);
+			\remove_filter('network_site_url',     [$this, 'site_url'],  100);
+			\remove_filter('wp_redirect',          [$this, 'site_url'], 100);
+
+			\remove_action('wp_loaded',            [$this, 'wp_loaded']);
+			\remove_filter('update_welcome_email', [$this, 'update_welcome_email']);
+
+			\add_action('template_redirect', 'wp_redirect_admin_locations', 1000);
+
+			\is_admin() && \remove_filter('login_url', [Admin::instance(), 'login_url'], 100);
+		}
 	}
 
 	/**
 	 * @param string $url
+	 * @param string $path
+	 * @param string $scheme
 	 * @return string
 	 */
-	public function login_url($url)
-	{
-		if (\is_admin()) {
-			$f = Utils::isCalledFrom('auth_redirect');
-
-			if ($f) {
-				\wp_die(\__('You must log in to access the administrative area.', 'wwhwl'));
-			}
-		}
-
-		return $this->rewrite_login_url($url);
-	}
-
-	public function site_url($url, $path, $scheme)
+	public function site_url($url, $path = null, $scheme = null)
 	{
 		return $this->rewrite_login_url($url, $scheme);
-	}
-
-	public function wp_redirect($url)
-	{
-		return $this->rewrite_login_url($url, null);
 	}
 
 	/**
@@ -109,21 +137,14 @@ final class Plugin
 		return $path === \home_url('', 'relative') && isset($_GET[$slug]);
 	}
 
-	public function wp_loaded()
+	private function checkOldLogin(string $path)
 	{
 		/**
 		 * @var string
 		 */
 		global $pagenow;
 
-		$slug = $this->get_login_slug();
-		if (empty($slug)) {
-			return;
-		}
-
-		$rpath    = (string)\parse_url($_SERVER['REQUEST_URI'], \PHP_URL_PATH);
-		$path     = \untrailingslashit($rpath);
-		$rel_wpl  = \site_url('/', 'relative') . 'wp-login.php';
+		$rel_wpl = \site_url('/', 'relative') . 'wp-login.php';
 
 		if (Utils::isSamePath($path, $rel_wpl) && !Utils::isPostPassRequest()) {
 			\do_action('wwhwl_wplogin_accessed');
@@ -135,6 +156,14 @@ final class Plugin
 			Utils::terminate();
 			// @codeCoverageIgnoreEnd
 		}
+	}
+
+	private function checkNewLogin(string $path, string $rpath)
+	{
+		/**
+		 * @var string
+		 */
+		global $pagenow;
 
 		if ($this->is_new_login($path)) {
 			if (Utils::doPermalinksDifferWithSlash($rpath, Utils::handleTrailingSlash($rpath))) {
@@ -158,6 +187,20 @@ final class Plugin
 		}
 	}
 
+	public function wp_loaded()
+	{
+		/**
+		 * @var string
+		 */
+		global $pagenow;
+
+		$rpath = (string)\parse_url($_SERVER['REQUEST_URI'], \PHP_URL_PATH);
+		$path  = \untrailingslashit($rpath);
+
+		$this->checkOldLogin($path);
+		$this->checkNewLogin($path, $rpath);
+	}
+
 	/**
 	 * @param string $s
 	 * @return string
@@ -165,10 +208,6 @@ final class Plugin
 	public function update_welcome_email($s)
 	{
 		$slug = $this->get_login_slug();
-		if (empty($slug)) {
-			return $s;
-		}
-
 		return \str_replace('wp-login.php', Utils::handleTrailingSlash($slug), $s);
 	}
 
@@ -176,7 +215,7 @@ final class Plugin
 	{
 		$slug = \get_option(self::OPTION_NAME, '');
 
-		if (empty($slug) && \is_plugin_active_for_network(self::$basename)) {
+		if (empty($slug) && self::$sitewide) {
 			$slug = \get_site_option(self::OPTION_NAME);
 		}
 
@@ -201,8 +240,7 @@ final class Plugin
 
 	private function rewrite_login_url(string $url, string $scheme = null) : string
 	{
-		$slug = $this->get_login_slug();
-		if (empty($slug) || false !== \strpos($url, 'wp-login.php?action=postpass')) {
+		if (false !== \strpos($url, 'wp-login.php?action=postpass')) {
 			return $url;
 		}
 

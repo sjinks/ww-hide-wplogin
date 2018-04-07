@@ -1,6 +1,7 @@
 <?php
 namespace WildWolf\HideWPLogin;
 
+
 final class Admin
 {
 	public static function instance()
@@ -22,7 +23,6 @@ final class Admin
 	public function init()
 	{
 		\add_action('admin_init', [$this, 'admin_init']);
-
 		\load_plugin_textdomain('wwhwla', /** @scrutinizer ignore-type */ false, \plugin_basename(\dirname(\dirname(__FILE__))) . '/lang/');
 	}
 
@@ -63,6 +63,17 @@ final class Admin
 			\add_action('wpmu_options',        [$this, 'wpmu_options']);
 			\add_action('update_wpmu_options', [$this, 'update_wpmu_options']);
 		}
+	}
+
+	public function login_url($url)
+	{
+		$f = Utils::isCalledFrom('auth_redirect');
+
+		if ($f) {
+			\wp_die(\__('You must log in to access the administrative area.', 'wwhwl'));
+		}
+
+		return $url;
 	}
 
 	public function input_field(array $args)

@@ -99,6 +99,32 @@ class AdminTest extends WP_UnitTestCase
 		$this->assertEquals(10, has_action('load-options-permalink.php', [$inst, 'load_options_permalink']));
 	}
 
+	/**
+	 * @expectedException \WPDieException
+	 */
+	public function testLoginURL_authredirect()
+	{
+		global $current_screen;
+
+		$this->assertFalse(is_admin());
+		$current_screen = new class {
+			public function in_admin()
+			{
+				return true;
+			}
+		};
+
+		add_filter('wp_redirect', function($url) { throw new \Exception($url); });
+
+		update_option(Plugin::OPTION_NAME, 'LOGIN');
+		try {
+			auth_redirect();
+		}
+		finally {
+			$current_screen = null;
+		}
+	}
+
 	public function testAdminNotices()
 	{
 		global $pagenow;
