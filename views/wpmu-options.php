@@ -3,7 +3,7 @@
 
 <p>
 	<?=__('This option allows you to set a networkwide default, which can be overridden by individual sites.', 'wwhwla'); ?>
-	<?=__('Simply go to to the site’s permalink settings to change the URL.', 'wwhwla'); ?>
+	<?=__('Simply go to to the site\'s permalink settings to change the URL.', 'wwhwla'); ?>
 </p>
 
 <table class="form-table">

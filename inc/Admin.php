@@ -70,7 +70,7 @@ final class Admin
 		$f = Utils::isCalledFrom('auth_redirect');
 
 		if ($f) {
-			\wp_die(\__('You must log in to access the administrative area.', 'wwhwl'));
+			\wp_die(\__('You must log in to access the administrative area.', 'wwhwla'));
 		}
 
 		return $url;

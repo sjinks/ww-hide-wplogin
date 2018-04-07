@@ -16,7 +16,11 @@ msgstr "<span id=\"hide-wp-login\">Спрятать wp-login.php</span>"
 msgid "Login URL"
 msgstr "URL для входа"
 
-#: ../inc/Admin.php:108
+#: ../inc/Admin.php:73
+msgid "You must log in to access the administrative area."
+msgstr "Вы должны войти в систему, чтобы получить доступ к административной области."
+
+#: ../inc/Admin.php:119
 #, php-format
 msgid ""
 "Your login URL is now <strong><a href=\"%1$s\" target=\"_blank\">%1$s</a></"
@@ -25,7 +29,7 @@ msgstr ""
 "Ваш URL-адрес для входа теперь <strong><a href=\"%1$s\" target=\"_blank\">"
 "%1$s</a></strong>. Пожалуйста, добавьте его в закладки."
 
-#: ../inc/Admin.php:115
+#: ../inc/Admin.php:126 ../inc/Admin.php:134
 msgid "Settings"
 msgstr "Настройки"
 
@@ -40,7 +44,7 @@ msgid ""
 msgstr ""
 
 #: ../views/wpmu-options.php:6
-msgid "Simply go to to the sites permalink settings to change the URL."
+msgid "Simply go to to the site's permalink settings to change the URL."
 msgstr ""
 
 #: ../views/wpmu-options.php:12

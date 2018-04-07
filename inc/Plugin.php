@@ -36,8 +36,6 @@ final class Plugin
 
 	public function init()
 	{
-		\load_plugin_textdomain('wwhwl', /** @scrutinizer ignore-type */ false, \plugin_basename(\dirname(__DIR__)) . '/lang/');
-
 		\register_setting('permalink', self::OPTION_NAME, ['type' => 'string', 'default' => '']);
 
 		if (\is_multisite()) {

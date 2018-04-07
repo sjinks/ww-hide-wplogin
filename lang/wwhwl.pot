@@ -1,3 +1,0 @@
-#: ../inc/Plugin.php:85
-msgid "You must log in to access the administrative area."
-msgstr ""

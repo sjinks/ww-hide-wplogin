@@ -6,14 +6,18 @@ msgstr ""
 msgid "Login URL"
 msgstr ""
 
-#: ../inc/Admin.php:108
+#: ../inc/Admin.php:73
+msgid "You must log in to access the administrative area."
+msgstr ""
+
+#: ../inc/Admin.php:119
 #, php-format
 msgid ""
 "Your login URL is now <strong><a href=\"%1$s\" target=\"_blank\">%1$s</a></"
 "strong>. Please bookmark it."
 msgstr ""
 
-#: ../inc/Admin.php:115
+#: ../inc/Admin.php:126 ../inc/Admin.php:134
 msgid "Settings"
 msgstr ""
 
@@ -28,7 +32,7 @@ msgid ""
 msgstr ""
 
 #: ../views/wpmu-options.php:6
-msgid "Simply go to to the sites permalink settings to change the URL."
+msgid "Simply go to to the site's permalink settings to change the URL."
 msgstr ""
 
 #: ../views/wpmu-options.php:12
