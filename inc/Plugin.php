@@ -60,7 +60,7 @@ final class Plugin
 	/**
 	 * @codeCoverageIgnore
 	 */
-	public function deactivate($network_wide)
+	public function deactivate(/** @scrutinizer ignore-unused */ $network_wide)
 	{
 	}
 
