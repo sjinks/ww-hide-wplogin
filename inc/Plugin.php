@@ -6,11 +6,6 @@ final class Plugin
 	const OPTION_NAME = 'wwhwl_slug';
 
 	/**
-	 * @var string
-	 */
-	private static $basename = '';
-
-	/**
 	 * @var bool
 	 */
 	private static $sitewide = false;
@@ -36,8 +31,6 @@ final class Plugin
 	 */
 	public function __construct()
 	{
-		self::$basename = \plugin_basename(\dirname(__DIR__) . '/plugin.php');
-
 		\add_action('init', [$this, 'init'], 10, 1);
 	}
 
@@ -55,7 +48,8 @@ final class Plugin
 				// @codeCoverageIgnoreEnd
 			}
 
-			self::$sitewide = \is_plugin_active_for_network(self::$basename);
+			$basename = \plugin_basename(\dirname(__DIR__) . '/plugin.php');
+			self::$sitewide = \is_plugin_active_for_network($basename);
 
 			\add_action('add_site_option_' . Plugin::OPTION_NAME,    [$this, 'init_filters']);
 			\add_action('update_site_option_' . Plugin::OPTION_NAME, [$this, 'init_filters']);
@@ -76,21 +70,18 @@ final class Plugin
 	public function init_filters()
 	{
 		$slug = $this->get_login_slug();
-
 		if (!empty($slug)) {
-			if (100 !== \has_filter('login_url', [$this, 'login_url'])) {
-				\add_filter('login_url',            [$this, 'site_url'], 100, 1);
-				\add_filter('site_url',             [$this, 'site_url'], 100, 3);
-				\add_filter('network_site_url',     [$this, 'site_url'], 100, 3);
-				\add_filter('wp_redirect',          [$this, 'site_url'], 100, 1);
+			\add_filter('login_url',            [$this, 'site_url'], 100, 1);
+			\add_filter('site_url',             [$this, 'site_url'], 100, 3);
+			\add_filter('network_site_url',     [$this, 'site_url'], 100, 3);
+			\add_filter('wp_redirect',          [$this, 'site_url'], 100, 1);
 
-				\add_action('wp_loaded',            [$this, 'wp_loaded']);
-				\add_filter('update_welcome_email', [$this, 'update_welcome_email']);
+			\add_action('wp_loaded',            [$this, 'wp_loaded']);
+			\add_filter('update_welcome_email', [$this, 'update_welcome_email']);
 
-				\remove_action('template_redirect', 'wp_redirect_admin_locations', 1000);
+			\remove_action('template_redirect', 'wp_redirect_admin_locations', 1000);
 
-				\is_admin() && \add_filter('login_url', [Admin::instance(), 'login_url'], 100, 1);
-			}
+			\is_admin() && \add_filter('login_url', [Admin::instance(), 'login_url'], 100, 1);
 		}
 		else {
 			\remove_filter('login_url',            [$this, 'site_url'], 100);
