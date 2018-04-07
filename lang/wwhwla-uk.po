@@ -3,8 +3,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
-"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Language: uk\n"
 "X-Source-Language: C\n"
 
@@ -23,11 +22,11 @@ msgstr "Ви повинні увійти, щоб отримати доступ �
 #: ../inc/Admin.php:119
 #, php-format
 msgid ""
-"Your login URL is now <strong><a href=\"%1$s\" target=\"_blank\">%1$s</a></"
-"strong>. Please bookmark it."
+"Your login URL is now <strong><a href=\"%1$s\" "
+"target=\"_blank\">%1$s</a></strong>. Please bookmark it."
 msgstr ""
-"Ваша URL-адреса для входу тепер <strong><a href=\"%1$s\" target=\"_blank\">"
-"%1$s</a></strong>. Будь ласка, закладіть її."
+"Ваша URL-адреса для входу тепер <strong><a href=\"%1$s\" "
+"target=\"_blank\">%1$s</a></strong>. Будь ласка, закладіть її."
 
 #: ../inc/Admin.php:126 ../inc/Admin.php:134
 msgid "Settings"
@@ -35,18 +34,22 @@ msgstr "Налаштування"
 
 #: ../views/wpmu-options.php:2
 msgid "Hide wp-login.php"
-msgstr ""
+msgstr "Сховати wp-login.php"
 
 #: ../views/wpmu-options.php:5
 msgid ""
 "This option allows you to set a networkwide default, which can be overridden "
 "by individual sites."
 msgstr ""
+"Ця опція дозволяє встановити значення за замовчуванням для всієї мережі, яке "
+"може бути перевизначено окремими сайтами."
 
 #: ../views/wpmu-options.php:6
 msgid "Simply go to to the site's permalink settings to change the URL."
 msgstr ""
+"Просто перейдіть до налаштувань Постійних посилань сайту, щоб змінити "
+"URL-адресу для входу."
 
 #: ../views/wpmu-options.php:12
 msgid "Networkwide default"
-msgstr ""
+msgstr "Значення за замовчуванням для мережі"

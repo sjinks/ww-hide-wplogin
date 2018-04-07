@@ -35,18 +35,18 @@ msgstr "Настройки"
 
 #: ../views/wpmu-options.php:2
 msgid "Hide wp-login.php"
-msgstr ""
+msgstr "Скрыть wp-login.php"
 
 #: ../views/wpmu-options.php:5
 msgid ""
 "This option allows you to set a networkwide default, which can be overridden "
 "by individual sites."
-msgstr ""
+msgstr "Данная настройка позволяет задать общее для всей сети значение, которое может бытть переопределено для любого сайта."
 
 #: ../views/wpmu-options.php:6
 msgid "Simply go to to the site's permalink settings to change the URL."
-msgstr ""
+msgstr "Для этого просто перейдите в настройки Постоянных ссылок сайта и измените адрес для входа."
 
 #: ../views/wpmu-options.php:12
 msgid "Networkwide default"
-msgstr ""
+msgstr "Значение по умолчанию для сети"
