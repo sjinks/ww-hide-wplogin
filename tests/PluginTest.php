@@ -1,5 +1,4 @@
 <?php
-
 use WildWolf\HideWPLogin\Plugin;
 
 class PluginTest extends WP_UnitTestCase
@@ -285,5 +284,60 @@ class PluginTest extends WP_UnitTestCase
 		finally {
 			tests_reset__SERVER();
 		}
+	}
+
+	public function testInitFilters()
+	{
+		$inst = Plugin::instance();
+
+		$this->assertFalse(has_action('wp_loaded',            [$inst, 'wp_loaded']));
+		$this->assertFalse(has_filter('update_welcome_email', [$inst, 'update_welcome_email']));
+		$this->assertFalse(has_filter('login_url',            [$inst, 'site_url']));
+		$this->assertFalse(has_filter('site_url',             [$inst, 'site_url']));
+		$this->assertFalse(has_filter('network_site_url',     [$inst, 'site_url']));
+		$this->assertFalse(has_filter('wp_redirect',          [$inst, 'site_url']));
+
+		update_option(Plugin::OPTION_NAME, 'xxx');
+
+		$this->assertEquals(10,  has_action('wp_loaded',            [$inst, 'wp_loaded']));
+		$this->assertEquals(10,  has_filter('update_welcome_email', [$inst, 'update_welcome_email']));
+		$this->assertEquals(100, has_filter('login_url',            [$inst, 'site_url']));
+		$this->assertEquals(100, has_filter('site_url',             [$inst, 'site_url']));
+		$this->assertEquals(100, has_filter('network_site_url',     [$inst, 'site_url']));
+		$this->assertEquals(100, has_filter('wp_redirect',          [$inst, 'site_url']));
+
+		update_option(Plugin::OPTION_NAME, '');
+
+		$this->assertFalse(has_action('wp_loaded',            [$inst, 'wp_loaded']));
+		$this->assertFalse(has_filter('update_welcome_email', [$inst, 'update_welcome_email']));
+		$this->assertFalse(has_filter('login_url',            [$inst, 'site_url']));
+		$this->assertFalse(has_filter('site_url',             [$inst, 'site_url']));
+		$this->assertFalse(has_filter('network_site_url',     [$inst, 'site_url']));
+		$this->assertFalse(has_filter('wp_redirect',          [$inst, 'site_url']));
+	}
+
+	public function testGetLoginSlugWPMU()
+	{
+		$name = Plugin::OPTION_NAME;
+
+		$value = get_site_option($name);
+		$this->assertEmpty($value);
+
+		$value = get_option($name);
+		$this->assertEmpty($value);
+
+		update_site_option($name, 'xxx');
+
+		if (is_multisite()) {
+			$value = get_option($name);
+			$this->assertEmpty($value);
+		}
+
+		$value = Plugin::get_login_slug();
+		$this->assertEquals('xxx', $value);
+
+		update_site_option($name, 'yyy');
+		$value = Plugin::get_login_slug();
+		$this->assertEquals('yyy', $value);
 	}
 }

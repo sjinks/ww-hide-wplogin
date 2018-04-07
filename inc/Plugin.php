@@ -31,14 +31,7 @@ final class Plugin
 	 */
 	public function __construct()
 	{
-		\add_action('init', [$this, 'init'], 10, 1);
-		$this->init_filters();
-	}
-
-	public function init()
-	{
-		\register_setting('permalink', self::OPTION_NAME, ['type' => 'string', 'default' => '']);
-
+		$basename = \plugin_basename(\dirname(__DIR__) . '/plugin.php');
 		if (\is_multisite()) {
 			if (!\function_exists('\\is_plugin_active_for_network')) {
 				// @codeCoverageIgnoreStart
@@ -47,15 +40,43 @@ final class Plugin
 				// @codeCoverageIgnoreEnd
 			}
 
-			$basename = \plugin_basename(\dirname(__DIR__) . '/plugin.php');
 			self::$sitewide = \is_plugin_active_for_network($basename);
+		}
 
+		\add_action('init', [$this, 'init'], 10, 1);
+		\add_action('activate_' . $basename,   [$this, 'activate']);
+		\add_action('deactivate_' . $basename, [$this, 'deactivate']);
+		$this->init_filters();
+	}
+
+	/**
+	 * @codeCoverageIgnore
+	 */
+	public function activate($network_wide)
+	{
+		self::$sitewide = $network_wide;
+	}
+
+	/**
+	 * @codeCoverageIgnore
+	 */
+	public function deactivate($network_wide)
+	{
+	}
+
+	public function init()
+	{
+		\register_setting('permalink', self::OPTION_NAME, ['type' => 'string', 'default' => '']);
+
+		if (\is_multisite()) {
 			\add_action('add_site_option_' . Plugin::OPTION_NAME,    [$this, 'init_filters']);
 			\add_action('update_site_option_' . Plugin::OPTION_NAME, [$this, 'init_filters']);
+			\add_action('delete_site_option_' . Plugin::OPTION_NAME, [$this, 'init_filters']);
 		}
 
 		\add_action('add_option_' . Plugin::OPTION_NAME,    [$this, 'init_filters']);
 		\add_action('update_option_' . Plugin::OPTION_NAME, [$this, 'init_filters']);
+		\add_action('delete_option_' . Plugin::OPTION_NAME, [$this, 'init_filters']);
 
 		if (\is_admin()) {
 			// @codeCoverageIgnoreStart
@@ -66,33 +87,33 @@ final class Plugin
 
 	public function init_filters()
 	{
-		$slug = $this->get_login_slug();
-		if (!empty($slug)) {
-			\add_filter('login_url',            [$this, 'site_url'], 100, 1);
-			\add_filter('site_url',             [$this, 'site_url'], 100, 3);
-			\add_filter('network_site_url',     [$this, 'site_url'], 100, 3);
-			\add_filter('wp_redirect',          [$this, 'site_url'], 100, 1);
+		static $filter_lut = [
+			false => '\\add_filter',
+			true  => '\\remove_filter',
+		];
 
-			\add_action('wp_loaded',            [$this, 'wp_loaded']);
-			\add_filter('update_welcome_email', [$this, 'update_welcome_email']);
+		static $action_lut = [
+			false => '\\add_action',
+			true  => '\\remove_action',
+		];
 
-			\remove_action('template_redirect', 'wp_redirect_admin_locations', 1000);
+		$slug    = $this->get_login_slug();
+		$key     = empty($slug);
+		$action  = $action_lut[$key];
+		$filter  = $filter_lut[$key];
+		$naction = $action_lut[!$key];
 
-			\is_admin() && \add_filter('login_url', [Admin::instance(), 'login_url'], 100, 1);
-		}
-		else {
-			\remove_filter('login_url',            [$this, 'site_url'], 100);
-			\remove_filter('site_url',             [$this, 'site_url'],  100);
-			\remove_filter('network_site_url',     [$this, 'site_url'],  100);
-			\remove_filter('wp_redirect',          [$this, 'site_url'], 100);
+		$filter('login_url',            [$this, 'site_url'], 100, 1);
+		$filter('site_url',             [$this, 'site_url'], 100, 3);
+		$filter('network_site_url',     [$this, 'site_url'], 100, 3);
+		$filter('wp_redirect',          [$this, 'site_url'], 100, 1);
 
-			\remove_action('wp_loaded',            [$this, 'wp_loaded']);
-			\remove_filter('update_welcome_email', [$this, 'update_welcome_email']);
+		$action('wp_loaded',            [$this, 'wp_loaded']);
+		$filter('update_welcome_email', [$this, 'update_welcome_email']);
 
-			\add_action('template_redirect', 'wp_redirect_admin_locations', 1000);
+		$naction('template_redirect',   'wp_redirect_admin_locations', 1000);
 
-			\is_admin() && \remove_filter('login_url', [Admin::instance(), 'login_url'], 100);
-		}
+		\is_admin() && $filter('login_url', [Admin::instance(), 'login_url'], 100, 1);
 	}
 
 	/**
