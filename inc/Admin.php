@@ -59,7 +59,7 @@ final class Admin
 		\add_action('admin_notices',                  [$this, 'admin_notices']);
 
 		if (\is_multisite() && \is_plugin_active_for_network($plugin)) {
-			\add_filter('network_admin_plugin_action_links_' . $plugin, [$this, 'plugin_action_links']);
+			\add_filter('network_admin_plugin_action_links_' . $plugin, [$this, 'network_admin_plugin_action_links']);
 			\add_action('wpmu_options',        [$this, 'wpmu_options']);
 			\add_action('update_wpmu_options', [$this, 'update_wpmu_options']);
 		}
@@ -112,6 +112,14 @@ EOT;
 	public function plugin_action_links(array $links) : array
 	{
 		$url  = \esc_attr(\admin_url('options-permalink.php#hide-wp-login'));
+		$link = '<a href="' . $url . '">' . \__('Settings', 'wwhwla') . '</a>';
+		$links['settings'] = $link;
+		return $links;
+	}
+
+	public function network_admin_plugin_action_links(array $links) : array
+	{
+		$url  = \esc_attr(\network_admin_url('settings.php#hide-wp-login'));
 		$link = '<a href="' . $url . '">' . \__('Settings', 'wwhwla') . '</a>';
 		$links['settings'] = $link;
 		return $links;

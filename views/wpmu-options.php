@@ -1,5 +1,5 @@
 <?php defined('ABSPATH') || die(); ?>
-<h3><?=__('Hide wp-login.php', 'wwhwla'); ?></h3>
+<h3 id="hide-wp-login"><?=__('Hide wp-login.php', 'wwhwla'); ?></h3>
 
 <p>
 	<?=__('This option allows you to set a networkwide default, which can be overridden by individual sites.', 'wwhwla'); ?>
