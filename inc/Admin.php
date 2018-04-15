@@ -23,7 +23,7 @@ final class Admin
 	public function init()
 	{
 		\add_action('admin_init', [$this, 'admin_init']);
-		\load_plugin_textdomain('wwhwla', /** @scrutinizer ignore-type */ false, \plugin_basename(\dirname(\dirname(__FILE__))) . '/lang/');
+		\load_plugin_textdomain('wwhwla', /** @scrutinizer ignore-type */ false, \plugin_basename(\dirname(__DIR__)) . '/lang/');
 	}
 
 	private function register_settings()
