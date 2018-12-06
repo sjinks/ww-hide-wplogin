@@ -1,7 +1,6 @@
 <?php
 namespace WildWolf\HideWPLogin;
 
-
 final class Admin
 {
 	public static function instance()
