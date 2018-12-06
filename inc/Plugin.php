@@ -121,9 +121,16 @@ final class Plugin
 	 * @param string $path
 	 * @param string $scheme
 	 * @return string
+	 * @see https://core.trac.wordpress.org/ticket/45506 - due to a WP 5.0 bug, $scheme could be an array
 	 */
 	public function site_url($url, $path = null, $scheme = null)
 	{
+		// @codeCoverageIgnoreStart
+		if (\is_array($scheme)) {
+			$scheme = null;
+		}
+		// @codeCoverageIgnoreEnd
+
 		return $this->rewrite_login_url($url, $scheme);
 	}
 
