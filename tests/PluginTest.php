@@ -180,10 +180,12 @@ class PluginTest extends WP_UnitTestCase
 			// If the paths does not match the slug, exit
 			['/%post_name%/', 'LOGIN', '/post/',  'OK'],
 			// Detect wp-login.php
-			['/%post_name%/', 'LOGIN', '/wp-login.php',      'wwhwl_wplogin_accessed'],
-			['/%post_name%/', 'LOGIN', '/wp%2Dlogin%2Ephp',  'wwhwl_wplogin_accessed'],
-			['/%post_name%/', 'LOGIN', '//wp-login.php',     'wwhwl_wplogin_accessed'],
-			['/%post_name%/', 'LOGIN', '//wp%2Dlogin%2Ephp', 'wwhwl_wplogin_accessed'],
+			['/%post_name%/', 'LOGIN', '/wp-login.php',        'wwhwl_wplogin_accessed'],
+			['/%post_name%/', 'LOGIN', '/wp%2Dlogin%2Ephp',    'wwhwl_wplogin_accessed'],
+			['/%post_name%/', 'LOGIN', '//wp-login.php',       'wwhwl_wplogin_accessed'],
+			['/%post_name%/', 'LOGIN', '//wp%2Dlogin%2Ephp',   'wwhwl_wplogin_accessed'],
+			['/%post_name%/', 'LOGIN', '/%2Fwp-login.php',     'wwhwl_wplogin_accessed'],
+			['/%post_name%/', 'LOGIN', '/%2Fwp%2Dlogin%2Ephp', 'wwhwl_wplogin_accessed'],
 		];
 	}
 

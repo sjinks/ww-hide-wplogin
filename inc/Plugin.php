@@ -210,7 +210,8 @@ final class Plugin
 		 */
 		global $pagenow;
 
-		$rpath = \preg_replace('!/{2,}!', '/', $_SERVER['REQUEST_URI']);
+		$rpath = \preg_replace('!%2f!i', '/', $_SERVER['REQUEST_URI']);
+		$rpath = \preg_replace('!/{2,}!', '/', $rpath);
 		$rpath = (string)\parse_url($rpath, \PHP_URL_PATH);
 		$path  = \untrailingslashit($rpath);
 
