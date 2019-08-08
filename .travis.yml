@@ -1,10 +1,11 @@
-sudo: false
-
 env:
   global:
     - CC_TEST_REPORTER_ID=a99d3e2e2a89153a1035f6f2012cf35455fc1682f4e17e4e9dc8088f33c5ea11
 
 language: php
+
+services:
+  - mysql
 
 notifications:
   email:
