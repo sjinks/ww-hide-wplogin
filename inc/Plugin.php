@@ -210,7 +210,8 @@ final class Plugin
 		 */
 		global $pagenow;
 
-		$rpath = (string)\parse_url($_SERVER['REQUEST_URI'], \PHP_URL_PATH);
+		$rpath = \preg_replace('!/{2,}!', '/', $_SERVER['REQUEST_URI']);
+		$rpath = (string)\parse_url($rpath, \PHP_URL_PATH);
 		$path  = \untrailingslashit($rpath);
 
 		$this->checkOldLogin($path);
