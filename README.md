@@ -1,6 +1,6 @@
 # ww-hide-wplogin
 
-[![Build Status](https://travis-ci.org/sjinks/ww-hide-wplogin.svg?branch=master)](https://travis-ci.org/sjinks/ww-hide-wplogin)
+![Build CI](https://github.com/sjinks/ww-hide-wplogin/workflows/Build%20CI/badge.svg)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/sjinks/ww-hide-wplogin/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/sjinks/ww-hide-wplogin/?branch=master)
 [![Code Coverage](https://scrutinizer-ci.com/g/sjinks/ww-hide-wplogin/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/sjinks/ww-hide-wplogin/?branch=master)
 [![Build Status](https://scrutinizer-ci.com/g/sjinks/ww-hide-wplogin/badges/build.png?b=master)](https://scrutinizer-ci.com/g/sjinks/ww-hide-wplogin/build-status/master)
