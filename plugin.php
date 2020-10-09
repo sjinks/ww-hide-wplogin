@@ -1,12 +1,12 @@
 <?php
 /*
- Plugin Name: WW Hide wp-login.php
- Plugin URI: https://github.com/sjinks/ww-hide-wplogin
- Description: Hides wp-login.php and allows you to use a custom URL for logging in.
- Author: Volodymyr Kolesnykov
- Version: 1.1.4
- License: MIT
- Network:
+	Plugin Name: WW Hide wp-login.php
+	Plugin URI: https://github.com/sjinks/ww-hide-wplogin
+	Description: Hides wp-login.php and allows you to use a custom URL for logging in.
+	Author: Volodymyr Kolesnykov
+	Version: 1.1.5
+	License: MIT
+	Network:
 */
 
 defined('ABSPATH') || die();

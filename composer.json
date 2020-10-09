@@ -9,6 +9,7 @@
 		{
 			"name" : "Volodymyr Kolesnykov",
 			"email" : "volodymyr@wildwolf.name",
+			"homepage": "https://wildwolf.name/",
 			"role" : "Developer"
 		}
 	],
@@ -22,9 +23,12 @@
 		"composer/installers" : "~1.0"
 	},
 	"require-dev": {
-		"phpunit/phpunit": "^6"
+		"phpunit/phpunit": "^7"
 	},
 	"archive": {
 		"exclude": ["/.*", "/tests", "/phpunit.xml", "/lang/Makefile"]
+	},
+	"scripts": {
+		"test": "phpunit"
 	}
 }

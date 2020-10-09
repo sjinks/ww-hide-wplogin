@@ -98,7 +98,7 @@ class UtilsTest extends WP_UnitTestCase
 		add_filter('wp_redirect', [$this, 'wp_redirect_filter']);
 		$this->location = '';
 		$_SERVER['QUERY_STRING'] = $qs;
- 		Utils::redirectToLogin($url);
+		Utils::redirectToLogin($url);
 		$this->assertEquals($expected, $this->location);
 	}
 
