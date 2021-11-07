@@ -99,6 +99,14 @@ abstract class Utils
 		return $s1 === $s2 || $d1 === $s2 || $s1 === $d2 || $d1 === $d2;
 	}
 
+	public static function endsWith(string $s1, string $s2) : bool
+	{
+		$d1 = \rawurldecode($s1);
+		$d2 = \rawurldecode($s2);
+
+		return substr($s1, -strlen($s2)) === $s2 || substr($s1, -strlen($d2)) === $d2 || substr($d1, -strlen($s2)) === $s2 || substr($d1, -strlen($d2)) === $d2;
+	}
+
 	/**
 	 * @see \wp_magic_quotes()
 	 * @return bool

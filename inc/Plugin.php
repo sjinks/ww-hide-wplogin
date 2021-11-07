@@ -160,9 +160,15 @@ final class Plugin
 		 */
 		global $pagenow;
 
+		if (Utils::isPostPassRequest()) {
+			return;
+		}
+
 		$rel_wpl = \site_url('/', 'relative') . 'wp-login.php';
 
-		if (Utils::isSamePath($path, $rel_wpl) && !Utils::isPostPassRequest()) {
+		// Handle WPMU subdirectory installation (https://www.nginx.com/resources/wiki/start/topics/recipes/wordpress/):
+		// rewrite ^(/[^/]+)?(/wp-.*) $2 last;
+		if (Utils::isSamePath($path, $rel_wpl) || is_multisite() && !is_subdomain_install() && Utils::endsWith($path, 'wp-login.php')) {
 			\do_action('wwhwl_wplogin_accessed');
 
 			// @codeCoverageIgnoreStart
@@ -210,9 +216,9 @@ final class Plugin
 		 */
 		global $pagenow;
 
-		$rpath = \preg_replace('!%2f!i', '/', $_SERVER['REQUEST_URI']);
+		$rpath = str_ireplace('%2f', '/', $_SERVER['REQUEST_URI']);
 		$rpath = \preg_replace('!/{2,}!', '/', $rpath);
-		$rpath = (string)\parse_url($rpath, \PHP_URL_PATH);
+		$rpath = (string)\wp_parse_url($rpath, \PHP_URL_PATH);
 		$path  = \untrailingslashit($rpath);
 
 		$this->checkOldLogin($path);
