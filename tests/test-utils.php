@@ -23,7 +23,7 @@ class UtilsTest extends WP_UnitTestCase {
 		self::assertFalse( $actual );
 	}
 
-	public function testTerminate() {
+	public function test_terminate() {
 		$this->expectException( WPDieException::class );
 		Utils::terminate();
 	}

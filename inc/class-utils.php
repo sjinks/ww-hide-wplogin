@@ -1,4 +1,5 @@
 <?php
+
 namespace WildWolf\WordPress\HideWPLogin;
 
 use WP_Rewrite;

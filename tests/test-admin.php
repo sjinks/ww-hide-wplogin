@@ -1,77 +1,9 @@
 <?php
 
 use WildWolf\WordPress\HideWPLogin\Admin;
-use WildWolf\WordPress\HideWPLogin\Plugin;
 use WildWolf\WordPress\HideWPLogin\Settings;
 
 class AdminTest extends WP_UnitTestCase {
-	// public function testRegisterSettings() {
-	// 	global $wp_settings_sections;
-	// 	global $wp_settings_fields;
-	// 	$copy_s = $wp_settings_sections;
-	// 	$copy_f = $wp_settings_fields;
-
-	// 	$wp_settings_sections = [];
-
-	// 	try {
-	// 		Admin::instance()->admin_init();
-
-	// 		self::assertArrayHasKey( 'permalink', $wp_settings_sections );
-	// 		self::assertArrayHasKey( 'wwhwl-section', $wp_settings_sections['permalink'] );
-
-	// 		self::assertArrayHasKey( 'permalink', $wp_settings_fields );
-	// 		self::assertArrayHasKey( 'wwhwl-section', $wp_settings_fields['permalink'] );
-	// 		self::assertArrayHasKey( Settings::OPTION_KEY, $wp_settings_fields['permalink']['wwhwl-section'] );
-	// 	} finally {
-	// 		$wp_settings_sections = $copy_s;
-	// 		$wp_settings_fields   = $copy_f;
-	// 	}
-	// }
-
-	// public function testRegisterSettings2() {
-	// 	global $wp_settings_sections;
-	// 	global $wp_settings_fields;
-	// 	global $wp_rewrite;
-
-	// 	$copy_s = $wp_settings_sections;
-	// 	$copy_f = $wp_settings_fields;
-
-	// 	$wp_settings_sections = [];
-
-	// 	try {
-	// 		$wp_settings_sections = [];
-
-	// 		update_option( 'permalink_structure', '' );
-	// 		$wp_rewrite->init();
-
-	// 		Admin::instance()->admin_init();
-
-	// 		self::assertArrayHasKey( 'permalink', $wp_settings_fields );
-	// 		self::assertArrayHasKey( 'wwhwl-section', $wp_settings_fields['permalink'] );
-	// 		self::assertArrayHasKey( Settings::OPTION_KEY, $wp_settings_fields['permalink']['wwhwl-section'] );
-	// 		self::assertArrayHasKey( 'args', $wp_settings_fields['permalink']['wwhwl-section'][ Settings::OPTION_KEY ] );
-	// 		self::assertArrayHasKey( 'after', $wp_settings_fields['permalink']['wwhwl-section'][ Settings::OPTION_KEY ]['args'] );
-	// 		self::assertEmpty( $wp_settings_fields['permalink']['wwhwl-section'][ Settings::OPTION_KEY ]['args']['after'] );
-
-	// 		$wp_settings_sections = [];
-
-	// 		update_option( 'permalink_structure', '/%post_name%/' );
-	// 		$wp_rewrite->init();
-
-	// 		Admin::instance()->admin_init();
-
-	// 		self::assertArrayHasKey( 'permalink', $wp_settings_fields );
-	// 		self::assertArrayHasKey( 'wwhwl-section', $wp_settings_fields['permalink'] );
-	// 		self::assertArrayHasKey( Settings::OPTION_KEY, $wp_settings_fields['permalink']['wwhwl-section'] );
-	// 		self::assertArrayHasKey( 'args', $wp_settings_fields['permalink']['wwhwl-section'][ Settings::OPTION_KEY ] );
-	// 		self::assertArrayHasKey( 'after', $wp_settings_fields['permalink']['wwhwl-section'][ Settings::OPTION_KEY ]['args'] );
-	// 		self::assertNotEmpty( $wp_settings_fields['permalink']['wwhwl-section'][ Settings::OPTION_KEY ]['args']['after'] );
-	// 	} finally {
-	// 		$wp_settings_sections = $copy_s;
-	// 		$wp_settings_fields   = $copy_f;
-	// 	}
-	// }
-
 	public function test_admin_init(): void {
 		$inst  = Admin::instance();
 		$_POST = [];
@@ -110,7 +42,7 @@ class AdminTest extends WP_UnitTestCase {
 		}
 	}
 
-	public function testAdminNotices() {
+	public function test_admin_notices(): void {
 		global $pagenow;
 		$copy = $pagenow;
 
@@ -160,7 +92,7 @@ class AdminTest extends WP_UnitTestCase {
 		self::assertArrayHasKey( 'settings', $links );
 	}
 
-	public function test_network_admin_plugin_action_links() {
+	public function test_network_admin_plugin_action_links(): void {
 		if ( is_multisite() ) {
 			self::assertTrue( is_plugin_active_for_network( 'ww-hide-wplogin/plugin.php' ) );
 
@@ -177,7 +109,7 @@ class AdminTest extends WP_UnitTestCase {
 		}
 	}
 
-	public function testGetForbiddenSlugs() {
+	public function test_get_forbidden_slugs(): void {
 		$_POST = [ Settings::OPTION_KEY => 'p' ];
 
 		try {
@@ -191,7 +123,7 @@ class AdminTest extends WP_UnitTestCase {
 		}
 	}
 
-	public function testLoadOptionsPermalink() {
+	public function test_load_options_permalink(): void {
 		$_POST = [ Settings::OPTION_KEY => 'login' ];
 
 		try {
@@ -208,7 +140,7 @@ class AdminTest extends WP_UnitTestCase {
 		}
 	}
 
-	public function testWPMUOptions() {
+	public function test_wpmu_options(): void {
 		if ( is_multisite() ) {
 			self::assertTrue( is_plugin_active_for_network( 'ww-hide-wplogin/plugin.php' ) );
 
@@ -227,7 +159,7 @@ class AdminTest extends WP_UnitTestCase {
 		}
 	}
 
-	public function testUpdateWPMUOptions() {
+	public function test_update_wpmu_options(): void {
 		if ( is_multisite() ) {
 			self::assertTrue( is_plugin_active_for_network( 'ww-hide-wplogin/plugin.php' ) );
 

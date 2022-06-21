@@ -1,4 +1,5 @@
 <?php
+
 namespace WildWolf\WordPress\HideWPLogin;
 
 use WildWolf\Utils\Singleton;
