@@ -273,7 +273,7 @@ class PluginTest extends WP_UnitTestCase {
 		self::assertFalse( has_filter( 'wp_redirect', [ $inst, 'site_url' ] ) );
 	}
 
-	public function test_ghet_login_slug_wpmu(): void {
+	public function test_get_login_slug_wpmu(): void {
 		$name = Settings::OPTION_KEY;
 
 		$value = get_site_option( $name );

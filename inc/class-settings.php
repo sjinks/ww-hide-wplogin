@@ -53,7 +53,12 @@ final class Settings implements ArrayAccess {
 			self::$sitewide = is_plugin_active_for_network( $this->basename );
 		}
 
+		add_action( 'activate_' . $this->basename,  [ $this, 'reinit' ] );
 		$this->refresh();
+	}
+
+	public function reinit( $netwide ): void {
+		self::$sitewide = ! empty( $netwide );
 	}
 
 	public function refresh(): void {
