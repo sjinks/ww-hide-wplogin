@@ -29,7 +29,6 @@ function _manually_load_plugin(): void {
 	// phpcs:ignore WordPressVIPMinimum.Functions.RestrictedFunctions.file_ops_symlink
 	symlink( dirname( __FILE__, 2 ), WP_PLUGIN_DIR . '/ww-hide-wplogin' );
 
-	/** @psalm-suppress MissingFile */
 	require_once ABSPATH . 'wp-admin/includes/plugin.php';
 
 	activate_plugin( 'ww-hide-wplogin/plugin.php', '', true );

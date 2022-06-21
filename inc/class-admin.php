@@ -104,12 +104,12 @@ final class Admin {
 	}
 
 	public function wpmu_options(): void {
-		$options = [ /* NOSONAR */
+		$options = [
 			'name'  => Settings::OPTION_KEY,
-			'value' => get_site_option( Settings::OPTION_KEY, '' ),
+			'value' => Settings::instance()->get_slug(),
 		];
 
-		require __DIR__ . '/../views/wpmu-options.php';
+		Utils::render( 'wpmu-options', $options );
 	}
 
 	public function update_wpmu_options(): void {

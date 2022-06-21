@@ -2,6 +2,9 @@
 
 use WildWolf\WordPress\HideWPLogin\Utils;
 
+/**
+ * @return mixed
+ */
 function call( callable $c, array $args = null ) {
 	return call_user_func_array( $c, $args );
 }

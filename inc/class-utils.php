@@ -62,6 +62,7 @@ abstract class Utils {
 	}
 
 	public static function redirect_to_login( string $url ): void {
+		/** @var mixed $qs */
 		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- we need the original query string
 		$qs  = $_SERVER['QUERY_STRING'] ?? '';
 		$qs  = empty( $qs ) || ! is_string( $qs ) ? '' : ( '?' . $qs );
@@ -120,5 +121,13 @@ abstract class Utils {
 		$ra = (string) ( $_REQUEST['action'] ?? '' );
 		return ( 'POST' === $rm ) && ( 'postpass' === $ga ) && isset( $_POST['post_password'] ) && ( $ga === $ra );
 		// phpcs:enable
+	}
+
+	/**
+	 * @psalm-param array<string,mixed> $params
+	 */
+	public static function render( string $view, array $params = [] ): void {
+		/** @psalm-suppress UnresolvableInclude */
+		require __DIR__ . '/../views/' . $view . '.php';
 	}
 }

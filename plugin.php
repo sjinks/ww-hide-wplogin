@@ -17,6 +17,7 @@ if ( defined( 'ABSPATH' ) ) {
 	} elseif ( file_exists( __DIR__ . '/vendor/autoload.php' ) ) {
 		require __DIR__ . '/vendor/autoload.php';
 	} elseif ( file_exists( ABSPATH . 'vendor/autoload.php' ) ) {
+		/** @psalm-suppress MissingFile */
 		require ABSPATH . 'vendor/autoload.php';
 	}
 

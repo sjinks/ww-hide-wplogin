@@ -53,25 +53,30 @@ final class Settings implements ArrayAccess {
 			self::$sitewide = is_plugin_active_for_network( $this->basename );
 		}
 
-		add_action( 'activate_' . $this->basename,  [ $this, 'reinit' ] );
+		add_action( 'activate_' . $this->basename, [ $this, 'reinit' ] );
 		$this->refresh();
 	}
 
+	/**
+	 * @param mixed $netwide
+	 */
 	public function reinit( $netwide ): void {
 		self::$sitewide = ! empty( $netwide );
 	}
 
 	public function refresh(): void {
 		$this->options = [
-			'slug' => (string) self::get_string_option( self::OPTION_KEY ),
+			'slug' => self::get_string_option( self::OPTION_KEY ),
 		];
 	}
 
 	private function get_string_option( string $key ): string {
+		/** @var mixed */
 		$value = get_option( $key, '' );
 
 		if ( empty( $value ) && self::$sitewide ) {
-			$value = get_site_option( $key );
+			/** @var mixed */
+			$value = get_site_option( $key, '' );
 		}
 
 		return (string) $value;

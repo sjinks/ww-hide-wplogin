@@ -1,4 +1,7 @@
-<?php defined( 'ABSPATH' ) || die(); ?>
+<?php
+defined( 'ABSPATH' ) || die(); 
+/** @psalm-var array{ name: string, value: string } $params */
+?>
 <h3 id="hide-wp-login"><?php esc_html_e( 'Hide wp-login.php', 'wwhwla' ); ?></h3>
 
 <p>
@@ -10,7 +13,7 @@
 	<tbody>
 		<tr>
 			<th scope="row"><?php esc_html_e( 'Networkwide default', 'wwhwla' ); ?></th>
-			<td><input type="text" name="<?php echo esc_attr( $options['name'] ); ?>" value="<?php echo esc_attr( $options['value'] ); ?>"/></td>
+			<td><input type="text" name="<?php echo esc_attr( $params['name'] ); ?>" value="<?php echo esc_attr( $params['value'] ); ?>"/></td>
 		</tr>
 	</tbody>
 </table>

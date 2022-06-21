@@ -52,7 +52,7 @@ final class Plugin {
 		$key     = (int) empty( $slug );
 		$action  = $action_lut[ $key ];
 		$filter  = $filter_lut[ $key ];
-		$naction = $action_lut[ ! $key ];
+		$naction = $action_lut[ (int) ! $key ];
 
 		$filter( 'login_url', [ $this, 'site_url' ], 100, 1 );
 		$filter( 'site_url', [ $this, 'site_url' ], 100, 3 );
