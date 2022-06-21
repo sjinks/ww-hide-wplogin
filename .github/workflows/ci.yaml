@@ -113,25 +113,3 @@ jobs:
           files: clover.xml
           flags: unittests
         if: ${{ steps.coverage.outputs.coverage != 'none' }}
-
-  build:
-    name: Build JS Files
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check out source code
-        uses: actions/checkout@v3
-
-      - name: Set up Node.js environment
-        uses: actions/setup-node@v3.3.0
-        with:
-          node-version: lts/*
-          cache: npm
-
-      - name: Install dependencies
-        run: npm ci --ignore-scripts
-
-      - name: Run postinstall scripts
-        run: npm rebuild && npm run prepare --if-present
-
-      - name: Build JS files
-        run: npm run build

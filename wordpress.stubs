@@ -1,0 +1,42 @@
+<?php
+
+namespace {
+	define( 'OBJECT', 'OBJECT' );
+	define( 'object', 'OBJECT' );
+	define( 'OBJECT_K', 'OBJECT_K' );
+	define( 'ARRAY_A', 'ARRAY_A' );
+	define( 'ARRAY_N', 'ARRAY_N' );
+
+	define( 'ABSPATH', '' );
+	define( 'WP_PLUGIN_DIR', '' );
+
+	class wpdb {
+
+		/** @var string */
+		public $login_log_table = '';
+
+		/**
+		 * @param string $query
+		 * @param mixed $args
+		 * @return string|null
+		 */
+		public function prepare( $query, ...$args ) {}
+	}
+
+	/*
+	 * @param mixed $data        Optional. Data to encode as JSON, then print and die. Default null.
+	 * @param int   $status_code Optional. The HTTP status code to output. Default null.
+	 * @param int   $options     Optional. Options to be passed to json_encode(). Default 0.
+	 * @psalm-return never-returns
+	 */
+	function wp_send_json_error( $data = null, $status_code = null, $options = 0 ) {}
+
+	/**
+	 * @param mixed $response    Variable (usually an array or object) to encode as JSON,
+	 *                           then print and die.
+	 * @param int   $status_code Optional. The HTTP status code to output. Default null.
+	 * @param int   $options     Optional. Options to be passed to json_encode(). Default 0.
+	 * @psalm-return never-returns
+	 */
+	function wp_send_json( $response, $status_code = null, $options = 0 ) {}
+}
