@@ -8,11 +8,11 @@ use ArrayAccess;
  * @psalm-type InputArgs = array{label_for: string, type?: string, before?: string, after?: string}
  */
 final class InputFactory {
-	/** @var ArrayAccess<string,scalar>|array<string,scalar> */
+	/** @var ArrayAccess<string,string>|array<string,string> */
 	private $settings;
 
 	/**
-	 * @param ArrayAccess<string,scalar>|array<string,scalar> $settings
+	 * @param ArrayAccess<string,string>|array<string,string> $settings
 	 */
 	public function __construct( $settings ) {
 		$this->settings = $settings;
@@ -24,7 +24,7 @@ final class InputFactory {
 	public function input( array $args ): void {
 		$id     = $args['label_for'];
 		$type   = $args['type'] ?? 'text';
-		$value  = $this->settings[ $id ];
+		$value  = $this->settings[ $id ] ?? '';
 		$before = $args['before'] ?? '';
 		$after  = $args['after'] ?? '';
 
@@ -34,7 +34,7 @@ final class InputFactory {
 			esc_attr( $type ),
 			esc_attr( $id ),
 			esc_attr( $id ),
-			esc_attr( (string) $value ),
+			esc_attr( $value ),
 			self::kses( $after )    // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- FP, we use wp_kses()
 		);
 	}

@@ -63,10 +63,8 @@ abstract class Utils {
 	}
 
 	public static function redirect_to_login( string $url ): void {
-		/** @var mixed $qs */
-		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- we need the original query string
-		$qs  = $_SERVER['QUERY_STRING'] ?? '';
-		$qs  = empty( $qs ) || ! is_string( $qs ) ? '' : ( '?' . $qs );
+		$qs  = self::get_server_var( 'QUERY_STRING' );
+		$qs  = empty( $qs ) ? '' : ( '?' . $qs );
 		$url = self::handle_trailing_slash( $url ) . $qs;
 
 		// wp_safe_redirect() will call wp_sanitize_redirect() on $url
@@ -117,9 +115,11 @@ abstract class Utils {
 		// phpcs:disable WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- we need the original values; we use them only in comparisons
 		// phpcs:ignore Squiz.PHP.CommentedOutCode.Found
 		// In WordPress, `$_REQUEST = array_merge( $_GET, $_POST );`
-		$rm = (string) ( $_SERVER['REQUEST_METHOD'] ?? '' );
-		$ga = (string) ( $_GET['action'] ?? '' );
-		$ra = (string) ( $_REQUEST['action'] ?? '' );
+		$rm = self::get_server_var( 'REQUEST_METHOD' );
+		/** @var mixed */
+		$ga = $_GET['action'] ?? '';
+		/** @var mixed */
+		$ra = $_REQUEST['action'] ?? '';
 		return ( 'POST' === $rm ) && ( 'postpass' === $ga ) && isset( $_POST['post_password'] ) && ( $ga === $ra );
 		// phpcs:enable
 	}
@@ -130,5 +130,14 @@ abstract class Utils {
 	public static function render( string $view, array $params = [] ): void {
 		/** @psalm-suppress UnresolvableInclude */
 		require __DIR__ . '/../views/' . $view . '.php';
+	}
+
+	public static function get_server_var( string $name ): string {
+		if ( isset( $_SERVER[ $name ] ) && is_scalar( $_SERVER[ $name ] ) ) {
+			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- this is caller's responsibility
+			return wp_unslash( (string) $_SERVER[ $name ] );
+		}
+
+		return '';
 	}
 }

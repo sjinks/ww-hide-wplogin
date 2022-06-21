@@ -63,7 +63,7 @@ class PluginTest extends WP_UnitTestCase {
 			$actual = tests_retrieve_phpmailer_instance()->get_sent()->body;
 			self::assertStringNotContainsString( 'wp-login.php', $actual );
 		} else {
-			$this->markTestSkipped( 'This test makes sense only with WPMU' );
+			self::markTestSkipped( 'This test makes sense only with WPMU' );
 		}
 	}
 

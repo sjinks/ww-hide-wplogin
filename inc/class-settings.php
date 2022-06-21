@@ -11,7 +11,7 @@ use WildWolf\Utils\Singleton;
  *  slug: string
  * }
  *
- * @template-implements ArrayAccess<string, scalar>
+ * @template-implements ArrayAccess<string, string>
  */
 final class Settings implements ArrayAccess {
 	use Singleton;
@@ -27,41 +27,27 @@ final class Settings implements ArrayAccess {
 		'slug' => '',
 	];
 
-	private static bool $sitewide = false;
-
 	/**
 	 * @var array
 	 * @psalm-var SettingsArray
 	 */
 	private $options;
 
-	private string $basename;
-
 	/**
 	 * @codeCoverageIgnore
 	 */
 	private function __construct() {
-		$this->basename = plugin_basename( dirname( __DIR__ ) . '/plugin.php' );
-		if ( is_multisite() ) {
-			if ( ! function_exists( 'is_plugin_active_for_network' ) ) {
-				// @codeCoverageIgnoreStart
-				// bootstrap.php includes this file
-				require_once ABSPATH . '/wp-admin/includes/plugin.php';
-				// @codeCoverageIgnoreEnd
-			}
+		$this->refresh();
 
-			self::$sitewide = is_plugin_active_for_network( $this->basename );
+		if ( is_multisite() ) {
+			add_action( 'add_site_option_' . self::OPTION_KEY, [ $this, 'refresh' ], 9 );
+			add_action( 'update_site_option_' . self::OPTION_KEY, [ $this, 'refresh' ], 9 );
+			add_action( 'delete_site_option_' . self::OPTION_KEY, [ $this, 'refresh' ], 9 );
 		}
 
-		add_action( 'activate_' . $this->basename, [ $this, 'reinit' ] );
-		$this->refresh();
-	}
-
-	/**
-	 * @param mixed $netwide
-	 */
-	public function reinit( $netwide ): void {
-		self::$sitewide = ! empty( $netwide );
+		add_action( 'add_option_' . self::OPTION_KEY, [ $this, 'refresh' ], 9 );
+		add_action( 'update_option_' . self::OPTION_KEY, [ $this, 'refresh' ], 9 );
+		add_action( 'delete_option_' . self::OPTION_KEY, [ $this, 'refresh' ], 9 );
 	}
 
 	public function refresh(): void {
@@ -74,12 +60,12 @@ final class Settings implements ArrayAccess {
 		/** @var mixed */
 		$value = get_option( $key, '' );
 
-		if ( empty( $value ) && self::$sitewide ) {
+		if ( empty( $value ) && is_multisite() ) {
 			/** @var mixed */
 			$value = get_site_option( $key, '' );
 		}
 
-		return (string) $value;
+		return is_scalar( $value ) ? (string) $value : '';
 	}
 
 	/**
@@ -98,7 +84,7 @@ final class Settings implements ArrayAccess {
 
 	/**
 	 * @param mixed $offset
-	 * @return int|string|bool|null
+	 * @return string|null
 	 */
 	public function offsetGet( $offset ) {
 		return $this->options[ (string) $offset ] ?? null;

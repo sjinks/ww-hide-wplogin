@@ -105,7 +105,7 @@ class AdminTest extends WP_UnitTestCase {
 			self::assertTrue( is_array( $links ) );
 			self::assertArrayHasKey( 'settings', $links );
 		} else {
-			$this->markTestSkipped( 'This test makes sense only with WPMU' );
+			self::markTestSkipped( 'This test makes sense only with WPMU' );
 		}
 	}
 
@@ -155,7 +155,7 @@ class AdminTest extends WP_UnitTestCase {
 
 			self::assertStringContainsString( 'value="xxx"', $s );
 		} else {
-			$this->markTestSkipped( 'This test makes sense only with WPMU' );
+			self::markTestSkipped( 'This test makes sense only with WPMU' );
 		}
 	}
 
@@ -175,7 +175,7 @@ class AdminTest extends WP_UnitTestCase {
 			// phpcs:ignore WordPress.Security
 			self::assertEquals( $_POST[ Settings::OPTION_KEY ], $actual );
 		} else {
-			$this->markTestSkipped( 'This test makes sense only with WPMU' );
+			self::markTestSkipped( 'This test makes sense only with WPMU' );
 		}
 	}
 }

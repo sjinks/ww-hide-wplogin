@@ -13,6 +13,10 @@ final class Plugin {
 	 */
 	public function __construct() {
 		add_action( 'init', [ $this, 'init' ], 10, 1 );
+		if ( is_admin() ) {
+			add_action( 'admin_init', [ Admin::class, 'instance' ], 10, 1 );
+		}
+
 		$this->init_filters();
 	}
 
@@ -26,12 +30,6 @@ final class Plugin {
 		add_action( 'add_option_' . Settings::OPTION_KEY, [ $this, 'init_filters' ] );
 		add_action( 'update_option_' . Settings::OPTION_KEY, [ $this, 'init_filters' ] );
 		add_action( 'delete_option_' . Settings::OPTION_KEY, [ $this, 'init_filters' ] );
-
-		if ( is_admin() ) {
-			// @codeCoverageIgnoreStart
-			Admin::instance();
-			// @codeCoverageIgnoreEnd
-		}
 	}
 
 	public function init_filters(): void {
@@ -46,8 +44,6 @@ final class Plugin {
 			0 => 'add_action',
 			1 => 'remove_action',
 		];
-
-		Settings::instance()->refresh();
 
 		$slug    = self::get_login_slug();
 		$key     = (int) empty( $slug );
@@ -145,8 +141,7 @@ final class Plugin {
 	}
 
 	public function wp_loaded(): void {
-		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- we need to extract the original path
-		$request_uri = (string) ( $_SERVER['REQUEST_URI'] ?? '' );
+		$request_uri = Utils::get_server_var( 'REQUEST_URI' );
 		$rpath       = str_ireplace( '%2f', '/', $request_uri );
 		$rpath       = preg_replace( '!/{2,}!', '/', $rpath );
 		$rpath       = (string) wp_parse_url( $rpath, PHP_URL_PATH );
