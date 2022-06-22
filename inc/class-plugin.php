@@ -14,7 +14,7 @@ final class Plugin {
 	public function __construct() {
 		add_action( 'init', [ $this, 'init' ], 10, 1 );
 		if ( is_admin() ) {
-			add_action( 'admin_init', [ Admin::class, 'instance' ], 10, 1 );
+			add_action( 'init', [ Admin::class, 'instance' ], 10, 1 );
 		}
 
 		$this->init_filters();
@@ -61,7 +61,9 @@ final class Plugin {
 
 		$naction( 'template_redirect', 'wp_redirect_admin_locations', 1000 );
 
-		is_admin() && $filter( 'login_url', [ Admin::instance(), 'login_url' ], 100, 1 );
+		if ( is_admin() ) {
+			$filter( 'login_url', [ Admin::instance(), 'login_url' ], 100, 1 );
+		}
 	}
 
 	/**
