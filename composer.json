@@ -2,33 +2,61 @@
 	"name": "wildwolf/ww-hide-wplogin",
 	"type": "wordpress-plugin",
 	"description": "A WordPress plugin to hide wp-login.php and use a custom URL for logging in.",
-	"keywords": ["wordpress", "plugin", "security", "login"],
+	"keywords": [
+		"wordpress",
+		"plugin",
+		"security",
+		"login"
+	],
 	"license": "MIT",
 	"homepage": "https://github.com/sjinks/ww-hide-wplogin",
 	"authors": [
 		{
-			"name" : "Volodymyr Kolesnykov",
-			"email" : "volodymyr@wildwolf.name",
+			"name": "Volodymyr Kolesnykov",
+			"email": "volodymyr@wildwolf.name",
 			"homepage": "https://wildwolf.name/",
-			"role" : "Developer"
+			"role": "Developer"
 		}
 	],
 	"autoload": {
-		"psr-4": {
-			"WildWolf\\HideWPLogin\\": "inc/"
-		}
+		"classmap": [
+			"inc/"
+		]
 	},
 	"require": {
-		"php" : ">=7.0.0",
-		"composer/installers" : "~2.0"
+		"php": "^7.4.0 || ^8.0.0",
+		"composer/installers": "^1.0 || ^2.0",
+		"wildwolf/singleton-trait": "^1.0"
 	},
 	"require-dev": {
-		"phpunit/phpunit": "^7"
+		"automattic/vipwpcs": "^2.3",
+		"dealerdirect/phpcodesniffer-composer-installer": "^0.7.1",
+		"johnpbloch/wordpress-core": "^6.0",
+		"php-stubs/wordpress-stubs": "^6.0",
+		"phpcompatibility/phpcompatibility-wp": "^2.1",
+		"phpunit/phpunit": "^9",
+		"psalm/plugin-phpunit": "^0.17.0",
+		"vimeo/psalm": "^4.7",
+		"wildwolf/phpunit7-php8-helper": "^1.0",
+		"wildwolf/wordpress-test-library-stubs": "^6.0",
+		"wp-coding-standards/wpcs": "^2.3",
+		"wp-phpunit/wp-phpunit": "^6.0",
+		"yoast/phpunit-polyfills": "^1.0"
 	},
-	"archive": {
-		"exclude": ["/.*", "/tests", "/phpunit.xml", "/lang/Makefile"]
+	"config": {
+		"sort-packages": true,
+		"platform": {
+			"php": "7.4"
+		},
+		"allow-plugins": {
+			"composer/installers": true,
+			"dealerdirect/phpcodesniffer-composer-installer": true
+		}
 	},
 	"scripts": {
+		"phpcs": "phpcs",
+		"phpcs:fix": "phpcbf",
+		"psalm": "psalm --long-progress --no-cache",
 		"test": "phpunit"
 	}
 }
