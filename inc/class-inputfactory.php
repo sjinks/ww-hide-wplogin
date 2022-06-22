@@ -5,7 +5,7 @@ namespace WildWolf\WordPress\HideWPLogin;
 use ArrayAccess;
 
 /**
- * @psalm-type InputArgs = array{label_for: string, type?: string, before?: string, after?: string}
+ * @psalm-type InputArgs = array{label_for: string, name: string, type?: string, before?: string, after?: string}
  */
 final class InputFactory {
 	/** @var ArrayAccess<string,string>|array<string,string> */
@@ -23,8 +23,9 @@ final class InputFactory {
 	 */
 	public function input( array $args ): void {
 		$id     = $args['label_for'];
+		$name   = $args['name'];
 		$type   = $args['type'] ?? 'text';
-		$value  = $this->settings[ $id ] ?? '';
+		$value  = $this->settings[ $name ] ?? '';
 		$before = $args['before'] ?? '';
 		$after  = $args['after'] ?? '';
 
@@ -32,7 +33,7 @@ final class InputFactory {
 			'%s<input type="%s" name="%s" id="%s" value="%s"/>%s',
 			self::kses( $before ),  // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- FP, we use wp_kses()
 			esc_attr( $type ),
-			esc_attr( $id ),
+			esc_attr( $name ),
 			esc_attr( $id ),
 			esc_attr( $value ),
 			self::kses( $after )    // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- FP, we use wp_kses()

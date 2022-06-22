@@ -2,7 +2,7 @@
 use WildWolf\WordPress\HideWPLogin\Plugin;
 use WildWolf\WordPress\HideWPLogin\Settings;
 
-class PluginTest extends WP_UnitTestCase {
+class Test_Plugin extends WP_UnitTestCase {
 	public function test_site_url(): void {
 		$url = site_url( 'wp-login.php' );
 		self::assertStringContainsString( 'wp-login.php', $url );

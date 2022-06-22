@@ -28,7 +28,7 @@ final class AdminSettings {
 			Settings::OPTION_KEY,
 			[
 				'default'           => '',
-				'sanitize_callback' => fn ( string $s ) => sanitize_title_with_dashes( $s, '', 'save' ),
+				'sanitize_callback' => fn ( string $s ): string => sanitize_title_with_dashes( $s, '', 'save' ),
 			]
 		);
 
@@ -67,6 +67,7 @@ final class AdminSettings {
 			$section_name,
 			[
 				'label_for' => Settings::OPTION_KEY,
+				'name'      => 'slug',
 				'before'    => $before,
 				'after'     => $after,
 			]

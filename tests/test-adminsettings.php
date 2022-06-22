@@ -22,4 +22,24 @@ class Test_AdminSettings extends WP_UnitTestCase /* NOSONAR */ {
 		self::assertArrayHasKey( 'group', $wp_registered_settings[ Settings::OPTION_KEY ] );
 		self::assertSame( AdminSettings::OPTION_GROUP, $wp_registered_settings[ Settings::OPTION_KEY ]['group'] );
 	}
+
+	public function test_save_option(): void {
+		$input    = 'This is awésome!';
+		$expected = 'this-is-aw%c3%a9some';
+
+		update_option( Settings::OPTION_KEY, $input );
+
+		$actual = get_option( Settings::OPTION_KEY );
+		self::assertSame( $expected, $actual );
+	}
+
+	public function test_save_site_option(): void {
+		$input    = 'This is awésome!';
+		$expected = 'this-is-aw%c3%a9some';
+
+		update_site_option( Settings::OPTION_KEY, $input );
+
+		$actual = get_site_option( Settings::OPTION_KEY );
+		self::assertSame( $expected, $actual );
+	}
 }

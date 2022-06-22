@@ -1,12 +1,12 @@
 <?php
 /*
-	Plugin Name: WW Hide wp-login.php
-	Plugin URI: https://github.com/sjinks/ww-hide-wplogin
-	Description: Hides wp-login.php and allows you to use a custom URL for logging in.
-	Author: Volodymyr Kolesnykov
-	Version: 2.0.0
-	License: MIT
-*/
+ * Plugin Name: WW Hide wp-login.php
+ * Plugin URI: https://github.com/sjinks/ww-hide-wplogin
+ * Description: Hides wp-login.php and allows you to use a custom URL for logging in.
+ * Author: Volodymyr Kolesnykov
+ * Version: 2.0.0
+ * License: MIT
+ */
 
 use WildWolf\WordPress\HideWPLogin\Plugin;
 
@@ -21,5 +21,8 @@ if ( defined( 'ABSPATH' ) ) {
 		require ABSPATH . 'vendor/autoload.php';
 	}
 
-	Plugin::instance();
+	// check if WordPress is being installed
+	if ( ! defined( 'WP_INSTALLING' ) || ! WP_INSTALLING ) {
+		Plugin::instance();
+	}
 }

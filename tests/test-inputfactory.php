@@ -18,12 +18,13 @@ class Test_InputFactory extends WP_UnitTestCase /* NOSONAR */ {
 	public function test_input(): void {
 		$output = $this->render( 'input', [
 			'label_for' => 'somekey',
+			'name'      => 'somename',
 			'before'    => 'be<span></span>fore',
 			'after'     => '<code>after</code>',
 		], $this->input_factory );
 
 		self::assertStringContainsString( 'id="somekey"', $output );
-		self::assertStringContainsString( 'name="somekey"', $output );
+		self::assertStringContainsString( 'name="somename"', $output );
 		self::assertStringContainsString( 'before', $output );
 		self::assertStringContainsString( '<code>after</code>', $output );
 	}

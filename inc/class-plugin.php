@@ -180,7 +180,7 @@ final class Plugin {
 		return $root . '?' . $slug;
 	}
 
-	private function rewrite_login_url( string $url, string $scheme = null ): string {
+	private function rewrite_login_url( string $url, ?string $scheme = null ): string {
 		if ( false !== strpos( $url, 'wp-login.php?action=postpass' ) ) {
 			return $url;
 		}

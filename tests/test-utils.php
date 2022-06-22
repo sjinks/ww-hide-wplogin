@@ -9,9 +9,13 @@ function call( callable $c, array $args = null ) {
 	return call_user_func_array( $c, $args );
 }
 
-class UtilsTest extends WP_UnitTestCase {
+class Test_Utils extends WP_UnitTestCase {
+	private string $location = '';
 
-	private $location = '';
+	public function setUp(): void {
+		parent::setUp();
+		$this->reset__SERVER();
+	}
 
 	public function test_is_called_from(): void {
 		self::assertTrue( class_exists( Utils::class, true ) );
@@ -183,5 +187,23 @@ class UtilsTest extends WP_UnitTestCase {
 		$actual                    = Utils::is_post_pass_request();
 
 		self::assertEquals( $expected, $actual );
+	}
+
+	/**
+	 * @dataProvider data_get_server_var
+	 */
+	public function test_get_server_var( string $var, string $expected ): void {
+		$actual = Utils::get_server_var( $var );
+		self::assertSame( $expected, $actual );
+	}
+
+	/**
+	 * @psalm-return iterable<array{string, string}>
+	 */
+	public function data_get_server_var(): iterable {
+		return [
+			[ 'REQUEST_METHOD', 'GET' ],
+			[ 'THIS_VER_DOES_NOT_EXIST', '' ],
+		];
 	}
 }
